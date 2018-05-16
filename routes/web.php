@@ -20,6 +20,10 @@ Route::get('/article/{id}', 'WebController@show');
 Route::get('/category/{slug}', 'WebController@category'); 
 Route::get('/allcategory', 'WebController@allcategory'); 
 Route::get('/subcategory/{slug}', 'WebController@subcategory'); 
-Route::post('/article/comment', 'WebController@Commentstore'); 
+// Route::post('/article/comment', 'WebController@Commentstore'); 
 Route::get('/contact', function () { return view('contact'); })->name('contact');
 Route::post('/contact', 'WebController@contact'); 
+
+
+
+Route::post('/comment', 'WebController@Commentstore'); 
