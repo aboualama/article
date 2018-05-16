@@ -49,14 +49,15 @@
         <h3 class=" text-center" >You Must Sing Up To Leave Comment</h3> 
     @else
         <div class="form-group"> 
-            <form action="/article/comment" method="post" class="form-control">
+          <meta name="csrf-token" content="{{ csrf_token() }}">
+            {{-- <form action="/article/comment" method="post" class="form-control"> --}}
                 <h3 class=" text-center" > Leave Comment</h3> 
-                {{csrf_field()}}
-                    <input type="text" name="name" required="Name" class="form-control text-left" placeholder="Your Name">
-                    <input type="hidden" name="article_id" value="{{ $article->id }}" class="form-control">  
-                    <textarea name="body" required="" class="form-control text-left" placeholder="Your Comment"></textarea>
-                    <input type="submit" value="Send Comment" class="form-control btn btn-primary">
-            </form>
+                {{-- {{csrf_field()}} --}}
+                    <input type="text"    id="name" class="form-control text-left" placeholder="Your Name">
+                    <input type="hidden"  id="article_id" value="{{ $article->id }}" class="form-control">  
+                    <textarea             id="body" class="form-control text-left" placeholder="Your Comment"></textarea>
+                    <input type="submit" value="Send Comment" class="form-control btn btn-primary comment">
+            {{-- </form> --}}
         </div>
     @endguest 
 
@@ -78,8 +79,8 @@
             @foreach ($article->comments as $comment)
                 <tr>
                   <th scope="row">{{$i++}}</th>
-                  <td>{{ $comment->name }}</td>
-                  <td>{{ $comment->body }}</td>
+                  <td id="getname">{{ $comment->name }}</td>
+                  <td id="getbody">{{ $comment->body }}</td>
                 </tr>  
             @endforeach
           </tbody>
@@ -109,6 +110,66 @@
     <a href="{{ URL::previous() }}" class="btn btn-success pull-right">Back</a>
 </div>
 
+
+{{-- <div id="error">  @include('errors.error') </div> --}}
+
+
+<!-- Scripts -->
+<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ asset('js/jquery.js') }}"></script>
+<script> 
+
+  $(document).ready(function()
+  {  
+      $(".comment").click(function(e)
+      {  
+          var username = $('#name').val();
+          var content = $('#body').val();
+          var article = $('#article_id').val(); 
+
+          e.preventDefault();
+          
+          $.ajax({
+            url: '/comment' ,
+            type: 'POST', 
+            data: 
+            {
+              name: username,
+              body: content, 
+              article_id: article,
+            },
+            success: function(data)
+            { 
+               $.each(data, function(i) 
+               { 
+                  var name = data[i].name;
+                  var body = data[i].body; 
+
+                  $('#getname').text(data.name);
+                  $('#getbody').text(data.body);
+                  console.log(data.body);
+                });
+            },     
+            error: function(error)
+            { 
+              alert('nooooooooo');
+            }, 
+          }); 
+   
+          $.ajaxSetup({
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+          }); 
+
+      });  
+  });
+    
+</script>
+
+
 </body>
 
 </html>
+
+
+
+ 
