@@ -120,15 +120,20 @@
 <script> 
 
   $(document).ready(function()
-  {  
+  {   
+      $.ajaxSetup({
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+          }); 
+          
       $(".comment").click(function(e)
       {  
+        e.preventDefault();
+        
           var username = $('#name').val();
           var content = $('#body').val();
           var article = $('#article_id').val(); 
+   
 
-          e.preventDefault();
-          
           $.ajax({
             url: '/comment' ,
             type: 'POST', 
@@ -146,8 +151,7 @@
                   var body = data[i].body; 
 
                   $('#getname').text(data.name);
-                  $('#getbody').text(data.body);
-                  console.log(data.body);
+                  $('#getbody').text(data.body); 
                 });
             },     
             error: function(error)
@@ -155,10 +159,7 @@
               alert('nooooooooo');
             }, 
           }); 
-   
-          $.ajaxSetup({
-            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
-          }); 
+
 
       });  
   });
