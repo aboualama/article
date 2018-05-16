@@ -46,19 +46,20 @@ class WebController extends Controller
     {
         $user_id = Auth::user()->id ; 
         $data = $this->validate(request(), [ 
-                    'name'   => 'required|string|max:255',
+                    'name'   => 'required|string|min:6|max:255',
                     'body'   => 'required|string',  
             ]);  
         $data['name']       = $request->name;     
         $data['body']       = $request->body;   
-        $data['article_id'] = $request->article_id;    
+        $data['article_id'] = $request->article_id;     
         $data['user_id']    = $user_id;     
 
          
         Comment::create($data);
-        return back();
+        return response()->json($data);
+         
 
-    }      
+    }     
 
 
 
