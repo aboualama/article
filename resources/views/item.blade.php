@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -74,7 +74,7 @@
               <th>Comment Massege</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="comments">
         @php $i = 1; @endphp
             @foreach ($article->comments as $comment)
                 <tr>
@@ -144,19 +144,24 @@
               article_id: article,
             },
             success: function(data)
-            { 
-               $.each(data, function(i) 
-               { 
-                  var name = data[i].name;
-                  var body = data[i].body; 
+            {  
+               var tr = $('<tr/>');  
 
-                  $('#getname').text(data.name);
-                  $('#getbody').text(data.body); 
-                });
+               tr.append($("<td/>",{
+                text: "#"
+               })).append($("<td/>",{
+                text: data.body
+               })).append($("<td/>",{
+                text: data.body
+               }))
+
+               $('#comments').append(tr);
+
+               // console.log(data.body); 
             },     
             error: function(error)
             { 
-              alert('nooooooooo');
+              alert('OPPs');
             }, 
           }); 
 
@@ -171,6 +176,3 @@
 
 </html>
 
-
-
- 
